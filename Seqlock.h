@@ -25,6 +25,8 @@ SOFTWARE.
 #include <atomic>
 #include <type_traits>
 
+namespace rigtorp {
+
 template <typename T> class Seqlock {
 public:
   static_assert(std::is_nothrow_copy_assignable<T>::value,
@@ -57,3 +59,4 @@ private:
   std::atomic<std::size_t> seq_;
   T value_;
 };
+}
