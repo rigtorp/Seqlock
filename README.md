@@ -1,6 +1,6 @@
 # Seqlock.h
 
-Implemenation of [Seqlock](https://en.wikipedia.org/wiki/Seqlock) in
+Implementation of [Seqlock](https://en.wikipedia.org/wiki/Seqlock) in
 C++.
 
 ## Example
