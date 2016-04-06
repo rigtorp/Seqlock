@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
 link_libraries(pthread)
 
+add_executable(SeqlockExample SeqlockExample.cpp)
 add_executable(SeqlockTest SeqlockTest.cpp)
 
 enable_testing()

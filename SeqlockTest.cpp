@@ -26,13 +26,13 @@ SOFTWARE.
 #include <thread>
 #include <vector>
 
-using namespace rigtorp;
-
-struct Data {
-  std::size_t a, b, c;
-};
-
 int main(int argc, char *argv[]) {
+  using namespace rigtorp;
+
+  struct Data {
+    std::size_t a, b, c;
+  };
+
   Seqlock<Data> sl;
   std::atomic<std::size_t> ready(0);
   std::vector<std::thread> ts;
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
       while (ready == 0) {
       }
       for (std::size_t i = 0; i < 10000000; ++i) {
-        Data copy = sl.load();
+        auto copy = sl.load();
         if (copy.a + 100 != copy.b || copy.c != copy.a + copy.b) {
           std::terminate();
         }
