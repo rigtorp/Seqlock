@@ -25,6 +25,12 @@ SOFTWARE.
 #include <atomic>
 #include <type_traits>
 
+#ifndef NDEBUG
+#define RIGTORP_SEQLOCK_NOINLINE __attribute__((noinline))
+#else
+#define RIGTORP_SEQLOCK_NOINLINE
+#endif
+
 namespace rigtorp {
 
 template <typename T> class Seqlock {
@@ -33,8 +39,10 @@ public:
                 "T must satisfy is_nothrow_copy_assignable");
   static_assert(std::is_trivially_copy_assignable<T>::value,
                 "T must satisfy is_trivially_copy_assignable");
+
   Seqlock() : seq_(0) {}
-  T load() const noexcept {
+
+  RIGTORP_SEQLOCK_NOINLINE T load() const noexcept {
     T copy;
     std::size_t seq0, seq1;
     do {
@@ -46,7 +54,8 @@ public:
     } while (seq0 != seq1 || seq0 & 1);
     return copy;
   }
-  void store(const T &desired) noexcept {
+
+  RIGTORP_SEQLOCK_NOINLINE void store(const T &desired) noexcept {
     std::size_t seq0 = seq_.load(std::memory_order_relaxed);
     seq_.store(seq0 + 1, std::memory_order_release);
     std::atomic_signal_fence(std::memory_order_acq_rel);
@@ -56,7 +65,17 @@ public:
   }
 
 private:
+  static const std::size_t kFalseSharingRange = 128;
+
+  // Align to prevent false sharing with adjecent data
+  alignas(kFalseSharingRange) T value_;
   std::atomic<std::size_t> seq_;
-  T value_;
+  // Padding to prevent false sharing with adjecent data
+  char padding_[kFalseSharingRange -
+                ((sizeof(value_) + sizeof(seq_)) % kFalseSharingRange)];
+  static_assert(
+      ((sizeof(value_) + sizeof(seq_) + sizeof(padding_)) %
+       kFalseSharingRange) == 0,
+      "sizeof(Seqlock<T>) should be a multiple of kFalseSharingRange");
 };
 }
