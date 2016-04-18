@@ -10,29 +10,6 @@ A seqlock can be used as an alternative to
 [a readers-writer lock](https://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock). It
 will never block the writer and doesn't require any memory bus locks.
 
-## Usage
-
-Create a seqlock:
-
-```cpp
-struct Data {
-  std::size_t a, b, c;
-};
-Seqlock<int> sl;
-```
-
-Store a value (can only be called from a single thread):
-
-```cpp
-sl.store({1, 2, 3});
-```
-
-Load a value (can be called from multiple threads):
-
-```cpp
-auto v = sl.load();
-```
-
 ## Example
 
 ```cpp
@@ -51,6 +28,29 @@ auto t = std::thread([&] {
 });
 sl.store({100, 200, 300});
 t.join();
+```
+
+## Usage
+
+Create a seqlock:
+
+```cpp
+struct Data {
+  std::size_t a, b, c;
+};
+Seqlock<Data> sl;
+```
+
+Store a value (can only be called from a single thread):
+
+```cpp
+sl.store({1, 2, 3});
+```
+
+Load a value (can be called from multiple threads):
+
+```cpp
+auto v = sl.load();
 ```
 
 ## Implementation
@@ -196,6 +196,16 @@ References:
 [x86-mm]: http://www.cl.cam.ac.uk/~pes20/weakmemory/cacm.pdf
 [arm-mm]: http://www.cl.cam.ac.uk/~pes20/ppc-supplemental/test7.pdf
 
+## Testing
+
+Testing lock-free algorithms is hard. I'm using two approaches to test
+the implementation:
+
+* A test that `load()` and `store()` publish results in the correct
+  order on a single thread.
+* A multithreaded fuzz test that `load()` never see a partial
+  `store()` (torn read).
+
 ## Potential improvements
 
 Allow partial updates and reads using a visitor pattern.
@@ -206,16 +216,6 @@ have the same effect as wrapping the seqlock in a spinlock.
 
 Trade-off space for reduced readers-writer contention by striping
 writes across multiple seqlocks.
-
-## Testing
-
-Testing lock-free algorithms is hard. I'm using two approaches to test
-the implementation:
-
-* A test that `load()` and `store()` publish results in the correct
-  order on a single thread.
-* A multithreaded fuzz test that `load()` never see a partial
-  `store()` (torn read).
 
 ## About
 
