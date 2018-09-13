@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2016 Erik Rigtorp <erik@rigtorp.se>
+Copyright (c) 2018 Erik Rigtorp <erik@rigtorp.se>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +20,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#include "Seqlock.h"
 #include <atomic>
 #include <iostream>
+#include <rigtorp/Seqlock.h>
 #include <thread>
 #include <vector>
 
-int main(int argc, char *argv[]) {
+int main(int argc[[maybe_unused]], char *argv[][[maybe_unused]]) {
   using namespace rigtorp;
 
   // Basic test
