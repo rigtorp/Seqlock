@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 project(Seqlock CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS "true")
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 add_library(Seqlock INTERFACE)
 target_include_directories(Seqlock INTERFACE

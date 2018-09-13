@@ -26,7 +26,7 @@ SOFTWARE.
 #include <thread>
 #include <vector>
 
-int main(int argc[[maybe_unused]], char *argv[][[maybe_unused]]) {
+int main(int, char *[]) {
   using namespace rigtorp;
 
   // Basic test
