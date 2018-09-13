@@ -1,7 +1,7 @@
-#include "Seqlock.h"
+#include <rigtorp/Seqlock.h>
 #include <thread>
 
-int main(int argc, char *argv[]) {
+int main(int, char *[]) {
   using namespace rigtorp;
 
   struct Data {
