@@ -79,3 +79,5 @@ private:
       "sizeof(Seqlock<T>) should be a multiple of kFalseSharingRange");
 };
 }
+
+#undef RIGTORP_SEQLOCK_NOINLINE
