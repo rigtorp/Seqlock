@@ -1,6 +1,5 @@
 # Seqlock.h
 
-[![Build Status](https://travis-ci.org/rigtorp/Seqlock.svg?branch=master)](https://travis-ci.org/rigtorp/Seqlock)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/rigtorp/Seqlock/master/LICENSE)
 
 Implementation of [seqlock](https://en.wikipedia.org/wiki/Seqlock) in
